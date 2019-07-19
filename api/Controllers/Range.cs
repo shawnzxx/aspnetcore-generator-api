@@ -10,8 +10,8 @@ namespace api.Controllers
         public int Count { get; set; } = 10;
         public bool Sort { get; set; } = false;
 
-        public IEnumerable<TItem> Of<TItem>(Func<TItem> generateItem)
+        public IEnumerable<T> Of<T>(Func<T> generateItem)
             => Count.Times(i => generateItem())
-                .OrderBy(n => Sort ? n : default(TItem));
+                .OrderBy(n => Sort ? n : default(T));
     }
 }
