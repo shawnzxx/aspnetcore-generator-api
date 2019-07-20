@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   generator:
-    image: my-registry:5000/gen:ci-11
+    image: my-registry:5000/gen:ci-${GENAPP_BUILD_NUMBER-10}
     networks: 
       - integration-test-network
     #ports:
@@ -16,7 +16,9 @@ services:
   integration-test:
     build:
       context: .
-    image: my-registry:5000/integration-test-10
+    image: my-registry:5000/integration-${BUILD_NUMBER-10}
+    environment:
+      TEAMCITY_PROJECT_NAME: ${TEAMCITY_PROJECT_NAME-fake}
     networks: 
       - integration-test-network
 networks:
