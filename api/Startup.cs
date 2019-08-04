@@ -27,10 +27,32 @@ namespace api
         {
             services.AddMvc()
                 .AddXmlSerializerFormatters();
-                
-            services.AddSwaggerGen(c =>
+
+            services.AddSwaggerGen(setupAction =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Generate Random Data API", Version = "v1" });
+                setupAction.SwaggerDoc("v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "Generate Random Data API",
+                        Version = "v1",
+                        Description = "Through this API you can access audit functions",
+                        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                        {
+                            Email = "shawn.zhang@avanade.com",
+                            Name = "Shawn Zhang",
+                            Url = new Uri("https://www.linkedin.com/in/shawnzxx/")
+                        },
+                        License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                        {
+                            Name = "MIT License",
+                            Url = new Uri("https://opensource.org/licenses/MIT")
+                        }
+                    });
+
+                //var xmlCommentsFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlCommentsFileFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFileName);
+
+                //setupAction.IncludeXmlComments(xmlCommentsFileFullPath);
             });
         }
 
@@ -39,10 +61,18 @@ namespace api
         {
             app.UseMvc();
 
+            //we add at back of UseHttpsRedirection, so that all link to swagger website using http will redirect to https site
+            //Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+
+            //Enable middleware to serve Swagger UI (HTML, CSS, JS etc.)
+            //Specifying the Swagger JSON endpoint
+            app.UseSwaggerUI(setupAction =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Generate Random Data API V1");
+                setupAction.SwaggerEndpoint(
+                    "/swagger/v1/swagger.json",
+                    "Generate Random Data API V1");
+                setupAction.RoutePrefix = "";
             });
 
             var redirectRootToSwagger = new RewriteOptions()
