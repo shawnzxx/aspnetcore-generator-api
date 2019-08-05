@@ -27,10 +27,32 @@ namespace api
         {
             services.AddMvc()
                 .AddXmlSerializerFormatters();
-                
-            services.AddSwaggerGen(c =>
+
+            services.AddSwaggerGen(setupAction =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Generate Random Data API", Version = "v1" });
+                setupAction.SwaggerDoc("v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "Generate Random Data API",
+                        Version = "v1",
+                        Description = "Through this API you can access audit functions",
+                        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                        {
+                            Email = "shawn.zhang@avanade.com",
+                            Name = "Shawn Zhang",
+                            Url = new Uri("https://www.linkedin.com/in/shawnzxx/")
+                        },
+                        License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                        {
+                            Name = "MIT License",
+                            Url = new Uri("https://opensource.org/licenses/MIT")
+                        }
+                    });
+
+                //var xmlCommentsFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlCommentsFileFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFileName);
+
+                //setupAction.IncludeXmlComments(xmlCommentsFileFullPath);
             });
         }
 
